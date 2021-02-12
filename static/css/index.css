@@ -1,0 +1,135 @@
+body {
+	margin: 0;
+    background: 
+     url(../images/background_pattern.png) repeat; /* Путь к графическому файлу и
+                                            повторение фона по вертикали */ 
+    }
+#header {
+	margin: 0;
+ 	background: rgba(255, 255, 255, 0.6); /* Цвет фона */
+ 	padding: 5px;
+	text-align:left
+   }
+
+.rightstr {
+    float: right; /* Выравнивание по правому краю */ 
+   }
+
+h1 {
+   padding-top: 20px;
+   text-align: left;
+   margin: 0;
+}
+h2{
+	padding-left: 15px;
+	
+}
+
+.add {
+    background: rgba(120, 255, 150, 0.6); 
+    font-size: 50pt; /* Размер шрифта в пунктах */
+	border: 0;
+	padding: 20px;
+	border-radius: 50px;
+	margin: 10px;
+    width:1000px;
+	outline:none;
+   }
+   
+.delete {
+   background: rgba(255, 120, 150, 0.6); 
+    font-size: 50pt; /* Размер шрифта в пунктах */
+	border: 0;
+	padding: 20px;
+	border-radius: 50px;
+	margin: 10px;
+	width:1000px;
+	outline:none;
+   }
+   
+.VK {
+	color: white;
+	font-size: 20pt;
+    background: rgba(39, 135, 245, 1); 
+	border: 0;
+	padding: 20px;
+	border-radius: 50px;
+	outline:none;
+   }
+
+button, 
+button:active, 
+button:focus {
+    outline: none;
+}
+
+.line { 
+    border-right: 2px solid #ccc; /* Параметры линии */ 
+    margin-right: 5px; /* Отступ слева */ 
+   }
+   
+.article {
+	font-weight: 5;
+	font-family: Geneva;
+	padding-left: 15px;
+    padding-right: 235px;
+}
+.frame {
+    position	: absolute;
+	top		: 230px;
+	right		: 15px;
+	width		: 100%;
+	text-align: right;
+}
+.quote {
+
+    position	: absolute;
+	top		: 80px;
+	right		: 40px;
+	width		: 100%;
+	text-align: right;
+}
+
+.pict {
+
+    position	: absolute;
+	top		: 580px;
+	right		: 40px;
+	width		: 100%;
+	text-align: right;
+}
+
+.tema {
+	margin: 0;
+    text-align: center;
+}
+
+.frametema {
+    padding-right: 100px; /* Поле слева */
+    background: 
+     url(../images/background_pattern.png) repeat-y; /* Путь к графическому файлу и
+                                            повторение фона по вертикали */ 
+}
+
+.rotatethis {
+    -webkit-transform : rotate(0.5turn);
+    -moz-transform : rotate(0.5turn);
+    -o-transform : rotate(0.5turn);
+    -ms-transform: rotate(0.5turn);
+    transform : rotate(0.5turn);
+}
+
+.lev {
+	display: inline-block;
+	float: left;
+	width: 75%; 
+}
+
+.prav {
+    display: inline-block;
+float: right;
+width: 25%;
+text-align: right;
+position	: absolute;
+right		: 40px;
+}
