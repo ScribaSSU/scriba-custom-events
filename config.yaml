@@ -7,3 +7,4 @@ database:
 
 logging:
     level: INFO
+    file_name: out.log
