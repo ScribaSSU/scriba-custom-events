@@ -1,7 +1,8 @@
-import flask
+from flask import Blueprint, render_template
 
-sce_bp = flask.Blueprint('sce', __name__, template_folder='templates', url_prefix='/sce')
+sce_bp = Blueprint('sce', __name__, template_folder='templates', url_prefix='/sce')
+
 
 @sce_bp.route("/")
 def index():
-    return flask.render_template('index.html')
+    return render_template('index.html')
