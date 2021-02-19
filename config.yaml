@@ -1,0 +1,9 @@
+database:
+    host: 127.0.0.1
+    port: 9000
+    user: user
+    password: password
+    db_name: scriba
+
+logging:
+    level: INFO
