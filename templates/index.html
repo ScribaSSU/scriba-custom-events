@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
 <head>
- <link rel="shortcut icon" href="image.png" type="image/png">
+ <link rel="shortcut icon" href="../static/images/shortcut_icon.png" type="shortcut_icon/png">
 </head>
 
 
@@ -10,14 +10,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Scriba </title>
-    <link rel="stylesheet" type="text/css" href="Styles.css" /> 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}" />
 </head>
 <body>
     <div id="header">
 		<h1>
 
 			<form>
-			<a href='/sce'>Scriba CustEv</a> 
+			<a href='/'>Scriba CustEv</a>
 			
 			<p class="rightstr" id = "status">
 			
@@ -32,10 +32,10 @@
 	<br><br><br><br>
 	<center>
 	   
-	   <form><input id = "add_lesson" type="button" class="show_list" value="Список пар" ></p></form>
-	   <form><input onclick="window.location.href='/sce/custom_events';" id = "delete_lesson" type="button" class="show_list" value="Список кастомных событий"></p></form>
-	   <form><input id = "add_event" type="button" class="add" value="Добавить пару"></p></form>
-	   <form><input id = "delete_event" type="button" class="add" value="Добавить кастомное событие"></p></form>
+	   <form><input id = "show_lesson" type="button" class="show_list" value="Список пар" ></p></form>
+	   <form><input onclick="window.location.href=' /events';" id = "show_event" type="button" class="show_list" value="Список кастомных событий"></p></form>
+	   <form><input id = "add_lesson" type="button" class="add" value="Добавить пару"></p></form>
+	   <form><input id = "add_event" type="button" class="add" value="Добавить кастомное событие"></p></form>
 	</center>
 </script>
 
