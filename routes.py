@@ -1,6 +1,5 @@
 from flask import render_template, request, redirect
-
-from app import app
+from web_app import app
 
 client_id = 12221 # айди приложения ВК, заменить, когда будет зарегистрировано, и вынести в конфиг
 client_secret = 211112 # секретный ключ приложения ВК, заменить, когда будет зарегистрировано, и вынести в конфиг
@@ -9,7 +8,6 @@ redirect_uri = 'http://scriba-custom-events.ru/vk_auth'
 @app.route("/")
 def index():
     return render_template('index.html')
-
 
 @app.route("/classes", methods=['GET', 'POST'])
 def classes():

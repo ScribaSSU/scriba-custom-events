@@ -1,12 +1,9 @@
 import logging
-import routes
 
-from flask import Flask
+from web_app import app
 
 from database import db_session
 from settings import log_conf
-
-app = Flask(__name__)
 
 
 @app.teardown_appcontext
@@ -25,7 +22,6 @@ def configure_logs():
     logging.basicConfig(filename=log_file_name, level=log_level,
                         format='%(asctime)s %(levelname)-5s[%(name)s] - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
-
 
 if __name__ == '__main__':
     configure_logs()
