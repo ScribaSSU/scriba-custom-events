@@ -1,13 +1,8 @@
 import logging
-import routes
-
-from flask import Flask
+from app_var import app
 
 from database import db_session
 from settings import log_conf
-
-app = Flask(__name__)
-
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
