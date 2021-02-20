@@ -1,38 +1,61 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<head>
+ <link rel="shortcut icon" href="image.png" type="image/png">
+</head>
+
+
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/shortcut_icon.png') }}" type="image/png">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css">
-    <title>Scriba</title>
+    <title>Scriba </title>
+    <link rel="stylesheet" type="text/css" href="Styles.css" /> 
 </head>
 <body>
-    <header id="header">
+    <div id="header">
 		<h1>
-			Scriba CustEv
+
+			<form>
+			<a href='/sce'>Scriba CustEv</a> 
+			
 			<p class="rightstr" id = "status">
+			
 				<button id = "enter_VK"  onclick="deleteSelf(this)" class = "VK" > Авторизуйтесь через VK </button> 
 			</p>
+		</form>
+
+
 		</h1>
-	</header>
+	</div>
 	
 	<br><br><br><br>
-    <div style="text-align: center;">
-        <input id="add_lesson" type="button" class="add" value="Добавить пару" ><p></p>
-        <input id="delete_lesson" type="button" class="delete" value="Удалить пару"><p></p>
-        <input id="add_event" type="button" class="add" value="Добавить событие"><p></p>
-        <input id="delete_event" type="button" class="delete" value="Удалить событие"><p></p>
-	</div>
-</body>
+	<center>
+	   
+	   <form><input id = "add_lesson" type="button" class="show_list" value="Список пар" ></p></form>
+	   <form><input onclick="window.location.href='/sce/custom_events';" id = "delete_lesson" type="button" class="show_list" value="Список кастомных событий"></p></form>
+	   <form><input id = "add_event" type="button" class="add" value="Добавить пару"></p></form>
+	   <form><input id = "delete_event" type="button" class="add" value="Добавить кастомное событие"></p></form>
+	</center>
+</script>
 
 <script>
-	function userSubmit() {
-	    let el = document.getElementById('status');
-	    el.innerText  = 'Здравствуйте, username!';
-	} 
+	function doSomething() {
+    alert("hi");
+}
 	function deleteSelf(button) {
-    button.remove();
-	userSubmit();
+		document.getElementById("enter_VK").style.display = 'none'
+		var el = document.getElementById('status');
+		el.innerText  = 'Здравствуйте, username!  ';
+		var button = document.createElement("button");
+		button.innerText = "Выход";
+		button.className ="VK"
+		button.onclick = function () {
+			result = confirm("Вы уверены?");
+			if (result) {
+			window.location.reload();
+			}
+			};
+		el.appendChild(button);
 }
 </script>
