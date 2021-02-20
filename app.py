@@ -1,5 +1,4 @@
 import logging
-import routes
 
 from flask import Flask
 
