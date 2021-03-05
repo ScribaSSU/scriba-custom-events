@@ -9,19 +9,11 @@ __log = logging.getLogger("Database")
 
 SQLALCHEMY_DATABASE_URI_MARIA_DB = f"mysql+pymysql://{db_conf['user']}:{db_conf['password']}@{db_conf['host']}:{db_conf['port']}/{db_conf['db_name']}"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URI_MARIA_DB, convert_unicode=True)
-db_session = scoped_session(
-    sessionmaker(autocommit=False, autoflush=False, bind=engine)
-)
-Base = declarative_base()
-Base.query = db_session.query_property()
-
-
+#TODO: переделать под flask sqlalchemy
 def init_db():
     try:
         __log.info("Import models...")
         import models
-
         __log.info("Database creating...")
         Base.metadata.create_all(bind=engine)
     except Exception as e:
