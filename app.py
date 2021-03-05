@@ -1,14 +1,12 @@
 import logging
-from app_var import app
+import routes
+from settings import log_conf, app
 
-from database import db_session
-from settings import log_conf
-
-
+"""
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
-
+"""
 
 def configure_logs():
     log_file_name = log_conf["file_name"]
