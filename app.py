@@ -2,11 +2,6 @@ import logging
 import routes
 from settings import log_conf, app
 
-"""
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
-"""
 
 def configure_logs():
     log_file_name = log_conf["file_name"]
@@ -22,7 +17,6 @@ def configure_logs():
         format="%(asctime)s %(levelname)-5s[%(name)s] - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-
 
 if __name__ == "__main__":
     configure_logs()
