@@ -18,6 +18,7 @@ def configure_logs():
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
+
 if __name__ == "__main__":
     configure_logs()
     app.run()
