@@ -1,10 +1,12 @@
 database:
     host: 127.0.0.1
-    port: 9000
-    user: user
-    password: password
-    db_name: scriba
+    port: 3306
+    user: root
+    password: qwe123
+    db_name: test
+    track_modifications: True
 
 logging:
     level: INFO
     file_name: out.log
+
