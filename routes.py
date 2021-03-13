@@ -25,7 +25,7 @@ def events():
     if request.method == "GET":  # список кастомных событий
         return render_template("custom_events.html")
     elif request.method == "POST":  # добавить кастомное событие
-        return render_template("custom_events.html")
+        return render_template("add_custom_events.html")
 
 
 @app.route("/login")

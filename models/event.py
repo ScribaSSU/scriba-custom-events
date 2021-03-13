@@ -8,8 +8,9 @@ class Event(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     event_name = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-    repeat = db.Column(db.Boolean, default=False)
+    date_begin = db.Column(db.DateTime, default=datetime.now, nullable=False)
+    date_end = db.Column(db.DateTime, default=date_begin)
+    repeat = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
         return f"<Event {self.event_id}>"
