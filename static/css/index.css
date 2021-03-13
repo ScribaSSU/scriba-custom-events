@@ -55,6 +55,16 @@ h2{
 	outline:none;
    }
 
+.submit_event {
+    border-radius: 50px;
+    background: rgba(120, 255, 150, 0.6);
+	font-size : 20px;
+	height: 50px;
+	width: 30%;
+	outline:none;
+	border: 0;
+   }
+
 
 button,
 button:active,

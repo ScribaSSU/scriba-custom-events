@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 
 from app import app
 from settings import vk_conf
@@ -6,7 +6,6 @@ from settings import vk_conf
 CLIENT_ID = vk_conf["client_id"]
 CLIENT_SECRET = vk_conf["client_secret"]
 REDIRECT_URI = vk_conf["redirect_uri"]
-
 
 @app.route("/")
 def index():
@@ -26,15 +25,13 @@ def events():
     if request.method == "GET":  # список кастомных событий
         return render_template("custom_events.html")
     elif request.method == "POST":  # добавить кастомное событие
-        return render_template("custom_events.html")
+        return render_template("add_custom_events.html")
 
 
 @app.route("/login")
 def login():
     return redirect(
-        "https://oauth.vk.com/authorize?client_id={}&display=page&redirect_uri={}&response_type=code".format(
-            client_id, redirect_uri
-        )
+        f"https://oauth.vk.com/authorize?client_id={CLIENT_ID}&display=page&redirect_uri={REDIRECTED_URI}&response_type=code"
     )
 
 
@@ -45,9 +42,7 @@ def vk_auth():
         if not auth_code:
             return redirect(url_for("index"))
         return redirect(
-            "https://oauth.vk.com/access_token?client_id={}&client_secret={}&redirect_uri={}&code={}".format(
-                client_id, client_secret, redirect_uri, auth_code
-            )
+            f"https://oauth.vk.com/access_token?client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}&redirect_uri={REDIRECTED_URI}&code={auth_code}"
         )
     elif request.method == "POST":
         if request.form.get("error"):
