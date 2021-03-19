@@ -1,11 +1,11 @@
 from flask import render_template, request, redirect, url_for
 
 from app import app
+from settings import vk_conf
 
-CLIENT_ID = 12221  # айди приложения ВК, заменить, когда будет зарегистрировано, и вынести в конфиг
-CLIENT_SECRET = 211112  # секретный ключ приложения ВК, заменить, когда будет зарегистрировано, и вынести в конфиг
-REDIRECTED_URI = "http://scriba-custom-events.ru/vk_auth"
-
+CLIENT_ID = vk_conf["client_id"]
+CLIENT_SECRET = vk_conf["client_secret"]
+REDIRECT_URI = vk_conf["redirect_uri"]
 
 @app.route("/")
 def index():
