@@ -1,6 +1,7 @@
 import logging
 import routes
 from settings import log_conf, app
+from models.db import db
 
 
 def configure_logs():
@@ -21,4 +22,7 @@ def configure_logs():
 
 if __name__ == "__main__":
     configure_logs()
+    db.create_all()
+
     app.run()
+
