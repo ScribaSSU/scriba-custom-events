@@ -111,8 +111,7 @@ ul {
 .frametema {
     padding-right: 100px; /* Поле слева */
     background:
-     url(узор.png) repeat-y; /* Путь к графическому файлу и
-                                            повторение фона по вертикали */
+     url(../images/background_pattern.png) repeat-y; /* Путь к графическому файлу и повторение фона по вертикали */
 }
 
 .rotatethis {
@@ -129,9 +128,9 @@ ul {
 }
 .prav {
     display: inline-block;
-float: right;
-width: 25%;
-text-align: right;
-position	: absolute;
-right		: 40px;
+	float: right;
+	width: 25%;
+	text-align: right;
+	position	: absolute;
+	right		: 40px;
 }
