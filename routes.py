@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for
 from app import app
 from settings import vk_conf
 from models.event import find_custom_events
+import requests
 
 CLIENT_ID = vk_conf["client_id"]
 CLIENT_SECRET = vk_conf["client_secret"]
@@ -34,25 +35,21 @@ def events():
 @app.route("/login")
 def login():
     return redirect(
-        f"https://oauth.vk.com/authorize?client_id={CLIENT_ID}&display=page&redirect_uri={REDIRECTED_URI}&response_type=code"
+        f"https://oauth.vk.com/authorize?client_id={CLIENT_ID}&display=page&redirect_uri={REDIRECT_URI}&response_type=code"
     )
 
 
-@app.route("/vk_auth", methods=["GET", "POST"])
+@app.route("/vk_auth")
 def vk_auth():
-    if request.method == "GET":
-        auth_code = request.args.get("code")
-        if not auth_code:
-            return redirect(url_for("index"))
-        return redirect(
-            f"https://oauth.vk.com/access_token?client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}&redirect_uri={REDIRECTED_URI}&code={auth_code}"
-        )
-    elif request.method == "POST":
-        if request.form.get("error"):
-            return redirect(url_for("index"))
-        access_token = request.form.get("access_token")
-        user_id = request.form.get("user_id")
+    auth_code = request.args.get("code")
+    if not auth_code:
         return redirect(url_for("index"))
+    link = "https://oauth.vk.com/access_token?" + \
+           f"client_id={CLIENT_ID}&client_secret={CLIENT_SECRET}&redirect_uri={REDIRECT_URI}&code={auth_code}"
+    data = requests.get(link).json()
+    access_token = data["access_token"]  # Это все нужно в сессию переделывать
+    user_id = data["user_id"]  # Это все нужно в сессию переделывать
+    return redirect(url_for("index"))
 
 
 @app.route("/logout")
