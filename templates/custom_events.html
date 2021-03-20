@@ -3,29 +3,22 @@
 {% block title %}List of events{% endblock %}
 
 {% block content %}
-    <div style="text-align: center;">
+	<div style="text-align: center;">
 
-	   <h3>Здесь представлены ваши кастомные события. Для удаления нажмите на крестик справа от карточки.</h3>
+        <h3>Здесь представлены Ваши кастомные события. Для удаления нажмите на крестик справа от карточки.</h3>
 
         <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
-            <span class="close" style="text-align: right;"> &times;</span><a><b>Название</b> дата <br> </a>Описание
+            <span class="close" style="text-align: right;"> &times;</span><a><b>Название_заглушка</b>дата_заглушка<br></a>Описание_заглушка
         </div>
         <br>
 
-        <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
-            <span class="close" style="text-align: right;"> &times;</span><a><b>Название</b> дата <br> </a>Описание
-        </div>
-        <br>
+        {% for row in data %}
+            <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
+                <span class="close" style="text-align: right;"> &times;</span><a><b>{{row.event_name}}</b>{{row.date_begin}}<br></a>{{row.description}}
+            </div>
+            <br>
+        {% endfor %}
 
-        <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
-            <span class="close" style="text-align: right;"> &times;</span><a><b>Название</b> дата <br> </a>Описание
-        </div>
-        <br>
-
-        <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
-            <span class="close" style="text-align: right;"> &times;</span><a><b>Название</b> дата <br> </a>Описание
-        </div>
-        <br>
 	</div>
 
     <script>
