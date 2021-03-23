@@ -12,7 +12,16 @@
 		<h1>
 			<a href='/'>Scriba CustEv</a>
 			<p class="rightstr" id="status">
-				<button id="enter_VK"  onclick="deleteSelf(this)" class="VK" > Авторизуйтесь через VK </button>
+                {% if not logged_in %}
+                    <form action="/login">
+                        <button type="submit" id="login_VK"  class="VK" > Авторизуйтесь через VK </button>
+                    </form>
+                {% else %}
+                    Вход выполнен!
+                    <form action="/logout">
+                        <button type="submit" id="logout_VK"  class="VK" >Выход</button>
+                    </form>
+                {% endif %}
 			</p>
 		</h1>
 	</div>
@@ -20,21 +29,4 @@
     {% block content %}{% endblock %}
 </body>
 
-<script>
-	function deleteSelf() {
-		document.getElementById("enter_VK").style.display = 'none'
-		let el = document.getElementById('status');
-		el.innerText  = 'Здравствуйте, username!';
-		let button = document.createElement("button");
-		button.innerText = "Выход";
-		button.className ="VK"
-		button.onclick = function () {
-            const result = confirm("Вы уверены?");
-            if (result) {
-			    window.location.reload();
-			}
-        };
-		el.appendChild(button);
-    }
-</script>
 </html>

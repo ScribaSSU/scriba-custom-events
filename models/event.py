@@ -1,6 +1,7 @@
 from datetime import datetime
 from models.db import db
 
+
 class Event(db.Model):
     __tablename__ = "events"
     event_id = db.Column(db.Integer, primary_key=True)
@@ -18,5 +19,6 @@ class Event(db.Model):
     def find_all():
         return db.session.query(Event).all()
 
-def find_custom_events(vk_id=2):
-    return db.session.query(Event).filter_by(user_id=vk_id).all()
+    @staticmethod
+    def find_custom_events(vk_id=2):
+        return db.session.query(Event).filter_by(user_id=vk_id).all()
