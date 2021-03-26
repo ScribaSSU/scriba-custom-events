@@ -25,23 +25,23 @@ h2{
 
 .add {
     background: rgba(120, 255, 150, 0.6);
-    font-size: 50pt; /* Размер шрифта в пунктах */
+    font-size: 150%;
 	border: 0;
 	padding: 20px;
 	border-radius: 50px;
 	margin: 10px;
-    width:1000px;
+    width:95%;
 	outline:none;
    }
 
 .show_list {
    background: rgba(120, 170, 255, 0.6);
-    font-size: 50pt; /* Размер шрифта в пунктах */
+    font-size: 150%;
 	border: 0;
 	padding: 20px;
 	border-radius: 50px;
 	margin: 10px;
-	width:1000px;
+	width:95%;
 	outline:none;
    }
 

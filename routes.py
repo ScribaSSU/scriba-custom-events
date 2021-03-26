@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import render_template, request, redirect, url_for, session
 
 from app import app
@@ -29,10 +31,27 @@ def events():
         events_list = Event.find_custom_events(session.get("user_id", None))
         return render_template("custom_events.html", logged_in=session.get("logged_in", False), data=events_list)
     elif request.method == "POST":  # добавить кастомное событие
-        return render_template("add_custom_events.html", logged_in=session.get("logged_in", False))
+        if request.form.get("submit_event"):
+            name_event = request.form.get("name_event")
+            description_event = request.form.get("description_event")
+            time_begin_event = request.form.get("time_begin_event")
+            if time_begin_event is not None and time_begin_event != '':
+                time_begin_event = datetime.strptime(time_begin_event, '%Y-%m-%dT%H:%M')
+            time_end_event = request.form.get("time_end_event")
+            if time_end_event is not None and time_end_event != '':
+                time_end_event = datetime.strptime(time_end_event, '%Y-%m-%dT%H:%M')
+            else:
+                time_end_event = None
+            type_event = request.form.get("type_event")
+            Event.save_event(session["user_id"], name_event,
+                             time_begin_event, time_end_event,
+                             type_event, description_event)
+            return redirect(url_for("events"))
+        else:
+            return render_template("add_custom_events.html", logged_in=session.get("logged_in", False))
 
 
-@app.route("/login")
+@app.route("/login", methods=['POST'])
 def login():
     return redirect(
         f"https://oauth.vk.com/authorize?client_id={CLIENT_ID}&display=page&redirect_uri={REDIRECT_URI}&response_type=code"
@@ -53,7 +72,7 @@ def vk_auth():
     return redirect(url_for("index"))
 
 
-@app.route("/logout")
+@app.route("/logout", methods=['POST'])
 def logout():
     session.pop("access_token", None)
     session.pop("user_id", None)

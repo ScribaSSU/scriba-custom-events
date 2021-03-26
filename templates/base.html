@@ -13,12 +13,12 @@
 			<a href='/'>Scriba CustEv</a>
 			<p class="rightstr" id="status">
                 {% if not logged_in %}
-                    <form action="/login">
+                    <form action="/login" method="POST">
                         <button type="submit" id="login_VK"  class="VK" > Авторизуйтесь через VK </button>
                     </form>
                 {% else %}
                     Вход выполнен!
-                    <form action="/logout">
+                    <form action="/logout" method="POST">
                         <button type="submit" id="logout_VK"  class="VK" >Выход</button>
                     </form>
                 {% endif %}

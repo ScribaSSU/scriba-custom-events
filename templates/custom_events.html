@@ -5,11 +5,11 @@
 {% block content %}
 	<div style="text-align: center;">
 
-        <h3>Здесь представлены Ваши кастомные события. Для удаления нажмите на крестик справа от карточки.</h3>
+        <h3>Здесь представлены Ваши кастомные события.<br>Для удаления нажмите на крестик справа от карточки.</h3>
 
         {% for row in data %}
             <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
-                <span class="close" style="text-align: right;"> &times;</span><a><b>{{row.event_name}}</b>{{row.date_begin}}<br></a>{{row.description}}
+                <span class="close" style="text-align: right;"> &times;</span><a><b>{{row.event_name}}</b><br>Дата начала: {{row.date_begin}}<br>Дата окончания: {{row.date_end}}<br></a>Описание: {{row.description}}
             </div>
             <br>
         {% endfor %}
