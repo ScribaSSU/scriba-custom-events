@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for
 
 from app import app
+from models.event import Event
 
 CLIENT_ID = 12221  # айди приложения ВК, заменить, когда будет зарегистрировано, и вынести в конфиг
 CLIENT_SECRET = 211112  # секретный ключ приложения ВК, заменить, когда будет зарегистрировано, и вынести в конфиг
@@ -18,13 +19,19 @@ def classes():
         return render_template("index.html")
     elif request.method == "POST":  # добавить пару
         return render_template("index.html")
-
-
+import flask
 @app.route("/events", methods=["GET", "POST"])
 def events():
     if request.method == "GET":  # список кастомных событий
         return render_template("custom_events.html")
     elif request.method == "POST":  # добавить кастомное событие
+        if request.form.get("submit_event"):
+            name_event = request.form.get("name_event")
+            description_event = request.form.get("description_event")
+            time_begin_event = request.form.get("time_begin_event")
+            time_end_event = request.form.get("time_end_event")
+            type_event = request.form.get("type_event")
+            Event.save_event(name_event, time_begin_event, time_end_event, type_event, description_event)
         return render_template("add_custom_events.html")
 
 

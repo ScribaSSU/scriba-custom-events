@@ -33,27 +33,27 @@
 <form method="Post">
   <div class="form-group">
     <label for="name_event">Название</label>
-    <input type="email" class="form-control" id="name_event">
+    <input type="text" class="form-control" id="name_event" name="name_event">
   </div>
 
    <div class="form-group">
-    <label for="descriprion_event">Описание</label>
-    <textarea class="form-control" id="descriprion_event" rows="3"></textarea>
+    <label for="description_event">Описание</label>
+    <textarea class="form-control" id="description_event" name="description_event" rows="3"></textarea>
   </div>
 
 <div class="form-group">
   <label for="time_begin_event">Время начала</label>
-    <input class="form-control" type="datetime-local" id="time_begin_event">
+    <input class="form-control" type="datetime-local" id="time_begin_event" name="time_begin_event">
 </div>
 
 <div class="form-group">
   <label for="time_end_event">Время окончания</label>
-    <input class="form-control" type="datetime-local" id="time_end_event">
+    <input class="form-control" type="datetime-local" id="time_end_event" name="time_end_event">
 </div>
 
   <div class="form-group">
     <label for="type_event">Повтор</label>
-    <select class="form-control" id="type_event">
+    <select class="form-control" id="type_event" name="type_event">
       <option>Один раз</option>
       <option>Ежедневно</option>
       <option>По будням</option>
@@ -61,7 +61,7 @@
 		<option>Раз в две недели</option>
     </select>
   </div>
-    <input id = "submit_event" type="submit" class="submit_event" value="Добавить" onclick="eventAdded()" ></p>
+    <input id = "submit_event" name = "submit_event" type="submit" class="submit_event" value="Добавить" onclick="eventAdded()" ></p>
 </form>
 
 
@@ -82,9 +82,8 @@ for (i = 0; i < closebtns.length; i++) {
 
 <script>
 	function eventAdded() {
-    alert("Событие добавлено!");
-    window.location.reload();
-}
+        alert("Событие добавлено!");
+    }
 	function deleteSelf(button) {
 		document.getElementById("enter_VK").style.display = 'none'
 		var el = document.getElementById('status');
