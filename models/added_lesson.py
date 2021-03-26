@@ -26,4 +26,4 @@ class AddedLesson(db.Model):
 
     @staticmethod
     def find_added_lessons(user_id=2):
-    return db.session.query(AddedLesson).filter_by(user_id=user_id).all()
+        return db.session.query(AddedLesson).filter_by(user_id=user_id).all()
