@@ -20,6 +20,10 @@ class Event(db.Model):
         return db.session.query(Event).all()
 
     @staticmethod
+    def find_custom_events(vk_id=2):
+        return db.session.query(Event).filter_by(user_id=vk_id).all()
+
+    @staticmethod
     def save_event(user_id, event_name, date_begin, date_end, type, description=''):
         new_event = Event(
             user_id=user_id,

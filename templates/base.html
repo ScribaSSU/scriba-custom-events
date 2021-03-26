@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="shortcut icon" type="shortcut_icon/png" href="{{ url_for('static', filename='images/shortcut_icon.png') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}" />
+</head>
+<body>
+    <div id="header">
+		<h1>
+			<a href='/'>Scriba CustEv</a>
+			<p class="rightstr" id="status">
+                {% if not logged_in %}
+                    <form action="/login">
+                        <button type="submit" id="login_VK"  class="VK" > Авторизуйтесь через VK </button>
+                    </form>
+                {% else %}
+                    Вход выполнен!
+                    <form action="/logout">
+                        <button type="submit" id="logout_VK"  class="VK" >Выход</button>
+                    </form>
+                {% endif %}
+			</p>
+		</h1>
+	</div>
+	<br><br><br><br>
+    {% block content %}{% endblock %}
+</body>
+
+</html>

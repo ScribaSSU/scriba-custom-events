@@ -5,3 +5,4 @@ __pycache__
 *.db
 
 out.log
+/vk_app_config.yaml

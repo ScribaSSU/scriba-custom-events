@@ -1,59 +1,22 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html lang="ru">
-<head>
-	<link rel="shortcut icon" type="shortcut_icon/png" href="{{ url_for('static', filename='images/shortcut_icon.png') }}" />
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <meta charset="UTF-8">
-    <title>Scriba</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}" />
-</head>
+{% block title %}Scriba{% endblock %}
 
-<body>
-    <div id="header">
-		<h1>
+{% block content %}
+    <div style="text-align: center;">
 
+	   <form action = "/classes" method="GET">
+           <input id="show_lesson" type="submit" class="show_list" value="Список пар" >
+       </form>
+	   <form action = "/events" method="GET">
+           <input id="show_event" type="submit" class="show_list" value="Список кастомных событий">
+       </form>
+	   <form action = "/classes" method="POST">
+           <input id="add_lesson" type="submit" class="add" value="Добавить пару">
+       </form>
+	   <form action = "/events" method="POST">
+           <input id="add_event" type="submit" class="add" value="Добавить кастомное событие">
+       </form>
 
-			<a href='/'>Scriba CustEv</a>
-			
-			<p class="rightstr" id = "status">
-			
-				<button id = "enter_VK"  onclick="deleteSelf(this)" class = "VK" > Авторизуйтесь через VK </button> 
-			</p>
-
-
-
-		</h1>
 	</div>
-	
-	<br><br><br><br>
-	<center>
-	   
-	   <form action = "/classes" method="GET"><input id = "show_lesson" type="submit" class="show_list" value="Список пар" ></p></form>
-	   <form action = "/events" method="GET"><input id = "show_event" type="submit" class="show_list" value="Список кастомных событий"></p></form>
-	   <form action = "/classes" method="Post"><input id = "add_lesson" type="submit" class="add" value="Добавить пару"></p></form>
-	   <form action = "/events" method="Post"><input id = "add_event" type="submit" class="add" value="Добавить кастомное событие"></p></form>
-	</center>
-</body>
-
-<script>
-	function doSomething() {
-    alert("hi");
-}
-	function deleteSelf(button) {
-		document.getElementById("enter_VK").style.display = 'none'
-		var el = document.getElementById('status');
-		el.innerText  = 'Здравствуйте, username!  ';
-		var button = document.createElement("button");
-		button.innerText = "Выход";
-		button.className ="VK"
-		button.onclick = function () {
-			result = confirm("Вы уверены?");
-			if (result) {
-			window.location.reload();
-			}
-			};
-		el.appendChild(button);
-}
-</script>
+{% endblock %}
