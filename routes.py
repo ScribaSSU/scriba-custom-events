@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import render_template, request, redirect, url_for, session
 
 from app import app
@@ -33,15 +35,24 @@ def events():
             name_event = request.form.get("name_event")
             description_event = request.form.get("description_event")
             time_begin_event = request.form.get("time_begin_event")
+            if time_begin_event is not None and time_begin_event != '':
+                time_begin_event = datetime.strptime(time_begin_event, '%Y-%m-%dT%H:%M')
             time_end_event = request.form.get("time_end_event")
+            if time_end_event is not None and time_end_event != '':
+                time_end_event = datetime.strptime(time_end_event, '%Y-%m-%dT%H:%M')
+            else:
+                time_end_event = None
             type_event = request.form.get("type_event")
-            Event.save_event(session["user_id"], name_event, time_begin_event, time_end_event, type_event, description_event)
-        return render_template("add_custom_events.html", logged_in=session.get("logged_in", False))
+            Event.save_event(session["user_id"], name_event,
+                             time_begin_event, time_end_event,
+                             type_event, description_event)
+            return redirect(url_for("events"))
+        else:
+            return render_template("add_custom_events.html", logged_in=session.get("logged_in", False))
 
 
 @app.route("/login", methods=['POST'])
 def login():
-    print('login')
     return redirect(
         f"https://oauth.vk.com/authorize?client_id={CLIENT_ID}&display=page&redirect_uri={REDIRECT_URI}&response_type=code"
     )
@@ -49,7 +60,6 @@ def login():
 
 @app.route("/vk_auth")
 def vk_auth():
-    print('vk auth')
     auth_code = request.args.get("code")
     if not auth_code:
         return redirect(url_for("index"))
@@ -64,7 +74,6 @@ def vk_auth():
 
 @app.route("/logout", methods=['POST'])
 def logout():
-    print('logout')
     session.pop("access_token", None)
     session.pop("user_id", None)
     session.pop("logged_in", False)
