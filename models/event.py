@@ -6,7 +6,7 @@ class Event(db.Model):
     event_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
     event_name = db.Column(db.String(200), nullable=False)
-    description = db.Column(db.Text)
+    description = db.Column(db.String(200))
     date_begin = db.Column(db.DateTime, nullable=False)
     date_end = db.Column(db.DateTime, nullable=False)
     type_repeat = db.Column(db.String(200), nullable=False)
