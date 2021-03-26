@@ -7,11 +7,6 @@
 
         <h3>Здесь представлены Ваши кастомные события. Для удаления нажмите на крестик справа от карточки.</h3>
 
-        <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
-            <span class="close" style="text-align: right;"> &times;</span><a><b>Название_заглушка</b>дата_заглушка<br></a>Описание_заглушка
-        </div>
-        <br>
-
         {% for row in data %}
             <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
                 <span class="close" style="text-align: right;"> &times;</span><a><b>{{row.event_name}}</b>{{row.date_begin}}<br></a>{{row.description}}
