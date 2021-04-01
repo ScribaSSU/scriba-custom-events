@@ -34,3 +34,8 @@ class Event(db.Model):
         db.session.add(new_event)
         db.session.commit()
         return new_event.event_id
+
+    @staticmethod
+    def delete_event(_event_id):
+        db.session.query(Event).filter_by(event_id=_event_id).delete()
+        db.session.commit()

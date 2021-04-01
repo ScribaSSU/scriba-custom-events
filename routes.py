@@ -19,14 +19,27 @@ def index():
 
 @app.route("/classes", methods=["GET", "POST"])
 def classes():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+
     if request.method == "GET":  # список пар
         return render_template("index.html", logged_in=session.get("logged_in", False))
     elif request.method == "POST":  # добавить пару
         return render_template("index.html", logged_in=session.get("logged_in", False))
 
 
+@app.route('/delete_event', methods=['POST'])
+def delete_event():
+    event_id = request.form.get("event_id")
+    Event.delete_event(event_id)
+
+    return redirect(url_for("events"))
+
+
 @app.route("/events", methods=["GET", "POST"])
 def events():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
     if request.method == "GET":  # список кастомных событий
         events_list = Event.find_custom_events(session.get("user_id", None))
         return render_template("custom_events.html", logged_in=session.get("logged_in", False), data=events_list)
