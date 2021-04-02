@@ -9,7 +9,12 @@
 
         {% for row in data %}
             <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
-                <span class="close" style="text-align: right;"> &times;</span><a><b>{{row.event_name}}</b><br>Дата начала: {{row.date_begin}}<br>Дата окончания: {{row.date_end}}<br></a>Описание: {{row.description}}
+
+                <form method="POST" action="/delete_event">
+                    <button type="submit" class="close" aria-label="Close" style="float: right" name="event_id" value="{{row.event_id}}">&times</button>
+                </form>
+
+                <a><b>{{row.event_name}}</b><br>Дата начала: {{row.date_begin}}<br>Дата окончания: {{row.date_end}}<br></a>Описание: {{row.description}}
             </div>
             <br>
         {% endfor %}
