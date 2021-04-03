@@ -4,24 +4,27 @@ body {
      url(../images/background_pattern.png); /* Путь к графическому файлу и
                                             повторение фона по вертикали */
     }
+
 #header {
 	margin: 0;
  	background: rgba(255, 255, 255, 0.6); /* Цвет фона */
  	padding: 5px;
 	text-align:left
-   }
+    }
+
 .rightstr {
     float: right; /* Выравнивание по правому краю */
-   }
+    }
+
 h1 {
    padding-top: 20px;
    text-align: left;
    margin: 0;
-}
-h2{
-	padding-left: 15px;
+    }
 
-}
+h2 {
+	padding-left: 15px;
+    }
 
 .add {
     background: rgba(120, 255, 150, 0.6);
@@ -32,7 +35,7 @@ h2{
 	margin: 10px;
     width:95%;
 	outline:none;
-   }
+    }
 
 .show_list {
    background: rgba(120, 170, 255, 0.6);
@@ -43,7 +46,7 @@ h2{
 	margin: 10px;
 	width:95%;
 	outline:none;
-   }
+    }
 
 .VK {
 	color: white;
@@ -53,7 +56,25 @@ h2{
 	padding: 20px;
 	border-radius: 50px;
 	outline:none;
-   }
+    }
+
+.round {
+    width: 150px;
+    height: 150px;
+    border:1px solid #ddd;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px #aaa;
+    margin: 5% auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    }
+    img:hover {
+    border-radius: 50%;
+    }
 
 .submit_event {
     border-radius: 50px;
@@ -63,56 +84,57 @@ h2{
 	width: 30%;
 	outline:none;
 	border: 0;
-   }
+    }
 
 
 button,
 button:active,
 button:focus {
     outline: none;
-}
+    }
 
 .line {
     border-right: 2px solid #ccc; /* Параметры линии */
     margin-right: 5px; /* Отступ слева */
-   }
+    }
 
 .article {
 	font-weight: 5;
 	font-family: Geneva;
 	padding-left: 15px;
     padding-right: 235px;
-}
+    }
+
 .frame {
     position	: absolute;
 	top		: 230px;
 	right		: 15px;
 	width		: 100%;
 	text-align: right;
-}
-.quote {
+    }
 
+.quote {
     position	: absolute;
 	top		: 80px;
 	right		: 40px;
 	width		: 100%;
 	text-align: right;
-}
+    }
 
 ul {
     list-style-type: none;
-}
-
+    }
 
 .tema {
 	margin: 0;
     text-align: center;
-}
+    }
+
 .frametema {
     padding-right: 100px; /* Поле слева */
     background:
      url(../images/background_pattern.png) repeat-y; /* Путь к графическому файлу и повторение фона по вертикали */
-}
+    }
 
 .rotatethis {
     -webkit-transform : rotate(0.5turn);
@@ -120,12 +142,14 @@ ul {
     -o-transform : rotate(0.5turn);
     -ms-transform: rotate(0.5turn);
     transform : rotate(0.5turn);
-}
+    }
+
 .lev {
 	display: inline-block;
 	float: left;
 	width: 75%;
-}
+    }
+
 .prav {
     display: inline-block;
 	float: right;
@@ -133,4 +157,4 @@ ul {
 	text-align: right;
 	position	: absolute;
 	right		: 40px;
-}
+    }

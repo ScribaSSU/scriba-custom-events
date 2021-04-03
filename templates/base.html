@@ -17,7 +17,8 @@
                         <button type="submit" id="login_VK"  class="VK" > Авторизуйтесь через VK </button>
                     </form>
                 {% else %}
-                    Вход выполнен!
+                    Здравствуйте, {{username}}!
+                    <img src={{pfp}} class="round">
                     <form action="/logout" method="POST">
                         <button type="submit" id="logout_VK"  class="VK" >Выход</button>
                     </form>

@@ -14,7 +14,10 @@ REDIRECT_URI = vk_conf["redirect_uri"]
 
 @app.route("/")
 def index():
-    return render_template("index.html", logged_in=session.get("logged_in", False))
+    return render_template("index.html",
+                           logged_in=session.get("logged_in", False),
+                           username=session.get("username"),
+                           pfp=session.get("pfp"))
 
 
 @app.route("/classes", methods=["GET", "POST"])
@@ -23,9 +26,15 @@ def classes():
         return redirect(url_for("index"))
 
     if request.method == "GET":  # список пар
-        return render_template("index.html", logged_in=session.get("logged_in", False))
+        return render_template("index.html",
+                               logged_in=session.get("logged_in", False),
+                               username=session.get("username"),
+                               pfp=session.get("pfp"))
     elif request.method == "POST":  # добавить пару
-        return render_template("index.html", logged_in=session.get("logged_in", False))
+        return render_template("index.html",
+                               logged_in=session.get("logged_in", False),
+                               username=session.get("username"),
+                               pfp=session.get("pfp"))
 
 
 @app.route('/delete_event', methods=['POST'])
@@ -42,7 +51,11 @@ def events():
         return redirect(url_for("index"))
     if request.method == "GET":  # список кастомных событий
         events_list = Event.find_custom_events(session.get("user_id", None))
-        return render_template("custom_events.html", logged_in=session.get("logged_in", False), data=events_list)
+        return render_template("custom_events.html",
+                               logged_in=session.get("logged_in", False),
+                               username=session.get("username"),
+                               pfp=session.get("pfp"),
+                               data=events_list)
     elif request.method == "POST":  # добавить кастомное событие
         if request.form.get("submit_event"):
             name_event = request.form.get("name_event")
@@ -61,7 +74,10 @@ def events():
                              type_event, description_event)
             return redirect(url_for("events"))
         else:
-            return render_template("add_custom_events.html", logged_in=session.get("logged_in", False))
+            return render_template("add_custom_events.html",
+                                   logged_in=session.get("logged_in", False),
+                                   username=session.get("username"),
+                                   pfp=session.get("pfp"))
 
 
 @app.route("/login", methods=['POST'])
@@ -82,6 +98,11 @@ def vk_auth():
     session["access_token"] = data["access_token"]
     session["user_id"] = data["user_id"]
     session["logged_in"] = True
+    link = "https://api.vk.com/method/users.get?" + \
+           f"user_ids={session.get('user_id')}&fields=photo_200&access_token={session.get('access_token')}&v=5.130"
+    user_data = requests.get(link).json()
+    session["username"] = user_data["response"][0]["first_name"]
+    session["pfp"] = user_data["response"][0]["photo_200"]
     return redirect(url_for("index"))
 
 
@@ -89,5 +110,7 @@ def vk_auth():
 def logout():
     session.pop("access_token", None)
     session.pop("user_id", None)
+    session.pop("username", None)
+    session.pop("pfp", None)
     session.pop("logged_in", False)
     return redirect(url_for("index"))
