@@ -35,9 +35,7 @@
 
         {% for row in data %}
             <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8);
-            {% if row.event_id in ids %}
-                    box-shadow: 0 4px 2px -2px red;
-            {% endif %}
+
              margin: auto; ">
 
                 <form method="POST" action="/delete_event">
@@ -47,12 +45,23 @@
                 <a><b>{{row.event_name}}</b><br>Дата начала: {{row.date_begin}}<br>Дата окончания: {{row.date_end}}<br>Повторение: {{row.type_repeat}}
                 </a>Описание: {{row.description}}
 
-                {% if row.event_id in ids %}
-                    <b>Событие завершено!</b>
-                {% endif %}
             </div>
             <br>
         {% endfor %}
 
 	</div>
+
+
+<script>
+        const cards = document.getElementsByClassName("card");
+        let i;
+        let now = Date.now();
+        let indexes = {{ indexes|tojson }};
+
+        indexes.forEach(idx => {
+            cards[idx].style["boxShadow"] = "0 4px 2px -2px red";
+            cards[idx].innerHTML += '<b>Событие завершено!</b>';
+        });
+
+    </script>
 {% endblock %}

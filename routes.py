@@ -44,14 +44,14 @@ def delete_event():
     return redirect(url_for("events"))
 
 
-def passed_ids(events_list):
-    ids = []
+def passed_indexes(events_list):
+    indexes = []
     now = datetime.now()
-    for event in events_list:
+    for i, event in enumerate(events_list):
         if event.type_repeat == "Один раз" and event.date_end < now:
-            ids.append(event.event_id)
+            indexes.append(i)
 
-    return ids
+    return indexes
 
 @app.route("/events", methods=["GET", "POST"])
 def events():
@@ -79,13 +79,13 @@ def events():
 
             events_list = new_list
 
-        ids = passed_ids(events_list)
+        indexes = passed_indexes(events_list)
         return render_template("custom_events.html",
                                logged_in=session.get("logged_in", False),
                                username=session.get("username"),
                                pfp=session.get("pfp"),
                                data=events_list,
-                               ids=ids)
+                               indexes=indexes)
     elif request.method == "POST":  # добавить кастомное событие
         if request.form.get("submit_event"):
             name_event = request.form.get("name_event")
