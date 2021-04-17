@@ -23,6 +23,5 @@ def configure_logs():
 if __name__ == "__main__":
     configure_logs()
     db.create_all()
-
     app.run()
 

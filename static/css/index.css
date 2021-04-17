@@ -158,3 +158,15 @@ ul {
 	position	: absolute;
 	right		: 40px;
     }
+
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: auto 200px;
+}

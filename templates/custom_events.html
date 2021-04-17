@@ -7,28 +7,59 @@
 
         <h3>Здесь представлены Ваши кастомные события.<br>Для удаления нажмите на крестик справа от карточки.</h3>
 
+        <div class="wrapper" style="display: grid;grid-template-columns: auto auto 400px; margin-bottom: 5px;margin-right:10%">
+            <div></div>
+            <div></div>
+
+            <form action="/events" method="GET">
+                <div class="input-group rounded">
+                    <input type="date" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" required
+                    name="search_date" />
+                    <button class="btn btn-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="wrapper" style="display: grid;grid-template-columns: auto auto 400px; margin-bottom: 20px;margin-right:10%">
+            <div></div>
+            <div></div>
+
+            <form action="/events" method="GET">
+                <button class="btn btn-primary" style="float: right">
+                        Сбросить фильтр
+                </button>
+            </form>
+        </div>
+
         {% for row in data %}
-            <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8); margin: auto; ">
+            <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8);
+
+             margin: auto; ">
 
                 <form method="POST" action="/delete_event">
                     <button type="submit" class="close" aria-label="Close" style="float: right" name="event_id" value="{{row.event_id}}">&times</button>
                 </form>
 
-                <a><b>{{row.event_name}}</b><br>Дата начала: {{row.date_begin}}<br>Дата окончания: {{row.date_end}}<br></a>Описание: {{row.description}}
+                <a><b>{{row.event_name}}</b><br>Дата начала: {{row.date_begin}}<br>Дата окончания: {{row.date_end}}<br>Повторение: {{row.type_repeat}}
+                </a>Описание: {{row.description}}
+
             </div>
             <br>
         {% endfor %}
 
 	</div>
 
-    <script>
-        const closebtns = document.getElementsByClassName("close");
-        let i;
 
-        for (i = 0; i < closebtns.length; i++) {
-            closebtns[i].addEventListener("click", function() {
-                this.parentElement.style.display = 'none';
-            });
-        }
+<script>
+        const cards = document.getElementsByClassName("card");
+        let indexes = {{ indexes|tojson }};
+
+        indexes.forEach(idx => {
+            cards[idx].style["boxShadow"] = "0 4px 2px -2px red";
+            cards[idx].innerHTML += '<b>Событие завершено!</b>';
+        });
+
     </script>
 {% endblock %}

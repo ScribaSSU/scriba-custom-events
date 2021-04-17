@@ -11,7 +11,6 @@ CLIENT_ID = vk_conf["client_id"]
 CLIENT_SECRET = vk_conf["client_secret"]
 REDIRECT_URI = vk_conf["redirect_uri"]
 
-
 @app.route("/")
 def index():
     return render_template("index.html",
@@ -45,17 +44,48 @@ def delete_event():
     return redirect(url_for("events"))
 
 
+def passed_indexes(events_list):
+    indexes = []
+    now = datetime.now()
+    for i, event in enumerate(events_list):
+        if event.type_repeat == "Один раз" and event.date_end < now:
+            indexes.append(i)
+
+    return indexes
+
 @app.route("/events", methods=["GET", "POST"])
 def events():
     if not session.get("logged_in", False):
         return redirect(url_for("index"))
     if request.method == "GET":  # список кастомных событий
         events_list = Event.find_custom_events(session.get("user_id", None))
+
+        if request.args.get("search_date"):
+            search_date = request.args.get("search_date")
+            search_date = datetime.strptime(search_date, '%Y-%m-%d').date()
+            new_list = []
+            for event in events_list:
+
+                passed = (search_date - event.date_begin.date()).days
+                if passed < 0:
+                    continue
+
+                if event.type_repeat == "Один раз" and search_date == event.date_begin.date() or \
+                   event.type_repeat == "Раз в неделю" and passed % 7 == 0 or \
+                   event.type_repeat == "Раз в две недели" and passed % 14 == 0 or \
+                   event.type_repeat == "Ежедневно" or \
+                   event.type_repeat == "По будням" and search_date.isoweekday() in range(1, 6):
+                   new_list.append(event)
+
+            events_list = new_list
+
+        indexes = passed_indexes(events_list)
         return render_template("custom_events.html",
                                logged_in=session.get("logged_in", False),
                                username=session.get("username"),
                                pfp=session.get("pfp"),
-                               data=events_list)
+                               data=events_list,
+                               indexes=indexes)
     elif request.method == "POST":  # добавить кастомное событие
         if request.form.get("submit_event"):
             name_event = request.form.get("name_event")
@@ -73,6 +103,7 @@ def events():
                              time_begin_event, time_end_event,
                              type_event, description_event)
             return redirect(url_for("events"))
+
         else:
             return render_template("add_custom_events.html",
                                    logged_in=session.get("logged_in", False),
