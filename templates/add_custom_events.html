@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Add an event{% endblock %}
+{% block title %}Добавить событие{% endblock %}
 
 {% block content %}
     <div style="margin: 50px; background: rgba(255, 255, 255, 0.6); text-align: center;">
         <h2>Добавление кастомного события</h2>
         <br>
-        <form method="POST">
+        <form action="/submit_events" method="POST">
             <div class="form-group">
                 <label for="name_event">Название</label>
                 <input type="text" class="form-control" id="name_event" name="name_event">
@@ -18,13 +18,15 @@
             </div>
 
             <div class="form-group">
-                <label for="time_begin_event">Время начала</label>
-                <input class="form-control" type="datetime-local" id="time_begin_event" name="time_begin_event">
+                <label for="date_begin_event">Время начала</label>
+                <input class="form-control" type="date" id="date_begin_event" name="date_begin_event" required>
+                <input class="form-control" type="time" id="time_begin_event" name="time_begin_event" required>
             </div>
 
             <div class="form-group">
-                <label for="time_end_event">Время окончания</label>
-                <input class="form-control" type="datetime-local" id="time_end_event" name="time_end_event">
+                <label for="date_end_event">Время окончания</label>
+                <input class="form-control" type="date" id="date_end_event" name="date_end_event">
+                <input class="form-control" type="time" id="time_end_event" name="time_end_event">
             </div>
 
             <div class="form-group">
@@ -37,7 +39,7 @@
                     <option>Раз в две недели</option>
                 </select>
             </div>
-            <input id="submit_event" name="submit_event" type="submit" class="submit_event" value="Добавить" onclick="eventAdded()" >
+            <input id="submit_event" name="submit_event" type="submit" class="submit_event" value="Добавить">
         </form>
     </div>
 

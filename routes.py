@@ -5,11 +5,13 @@ from flask import render_template, request, redirect, url_for, session
 from app import app
 from settings import vk_conf
 from models.event import Event
+from models.user_preferences import UserPreferences
 import requests
 
 CLIENT_ID = vk_conf["client_id"]
 CLIENT_SECRET = vk_conf["client_secret"]
 REDIRECT_URI = vk_conf["redirect_uri"]
+
 
 @app.route("/")
 def index():
@@ -19,28 +21,71 @@ def index():
                            pfp=session.get("pfp"))
 
 
-@app.route("/classes", methods=["GET", "POST"])
+@app.route("/classes_render")
+def classes_render():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+    return redirect(url_for("classes"))
+
+
+@app.route("/classes", methods=["GET"])
 def classes():
     if not session.get("logged_in", False):
         return redirect(url_for("index"))
-
     if request.method == "GET":  # список пар
-        return render_template("index.html",
+        preferences = UserPreferences.get_user_group(session.get("user_id", None))
+        classes_list = []
+        if preferences:
+            department = preferences[0].user_department
+            group_number = preferences[0].user_group
+        else:
+            department = ""
+            group_number = ""
+        departments = {}
+        week_days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
+        week_types = {"DENOM": "Знаменатель", "NOM": "Числитель"}
+        lesson_types = {"LECTURE": "Лекция", "PRACTICE": "Практика"}
+        link = "https://scribabot.ml/api/v1.0/departments"
+        for d in requests.get(link).json()["departmentsList"]:
+            departments[d["url"]] = (d["fullName"], d["shortName"])
+        if department and group_number:
+            for i in range(1, 7):
+                link = "https://scribabot.ml/api/v1.0/schedule/full/" + \
+                       f"{department}/{group_number}/{i}"
+                classes_list.append(sorted(requests.get(link).json()["lessons"],
+                                           key=lambda x: x["lessonTime"]["lessonNumber"]))
+        return render_template("classes.html",
                                logged_in=session.get("logged_in", False),
                                username=session.get("username"),
-                               pfp=session.get("pfp"))
-    elif request.method == "POST":  # добавить пару
-        return render_template("index.html",
-                               logged_in=session.get("logged_in", False),
-                               username=session.get("username"),
-                               pfp=session.get("pfp"))
+                               pfp=session.get("pfp"),
+                               data=classes_list,
+                               week_days=week_days,
+                               week_types=week_types,
+                               lesson_types=lesson_types,
+                               departments=departments,
+                               user_department=departments[department][1],
+                               user_group=group_number)
+
+
+@app.route("/submit_preferences", methods=["POST"])
+def submit_preferences():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+    if request.method == "POST":  # добавить кастомное событие
+        if request.form.get("submit_preferences"):
+            department = request.form.get("department")
+            course = request.form.get("course")
+            group = request.form.get("group")
+            if department and course and group:
+                UserPreferences.save_user_group(session["user_id"], department, course, group)
+            return redirect(url_for("classes"))
+    return redirect(url_for("classes"))
 
 
 @app.route('/delete_event', methods=['POST'])
 def delete_event():
     event_id = request.form.get("event_id")
     Event.delete_event(event_id)
-
     return redirect(url_for("events"))
 
 
@@ -53,7 +98,15 @@ def passed_indexes(events_list):
 
     return indexes
 
-@app.route("/events", methods=["GET", "POST"])
+
+@app.route("/events_render")
+def events_render():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+    return redirect(url_for("events"))
+
+
+@app.route("/events", methods=["GET"])
 def events():
     if not session.get("logged_in", False):
         return redirect(url_for("index"))
@@ -86,29 +139,52 @@ def events():
                                pfp=session.get("pfp"),
                                data=events_list,
                                indexes=indexes)
-    elif request.method == "POST":  # добавить кастомное событие
+
+
+@app.route("/add_events_render")
+def add_events_render():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+    return redirect(url_for("add_events"))
+
+
+@app.route("/add_events")
+def add_events():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+    return render_template("add_custom_events.html",
+                           logged_in=session.get("logged_in", False),
+                           username=session.get("username"),
+                           pfp=session.get("pfp"))
+
+
+@app.route("/submit_events", methods=["POST"])
+def submit_events():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+    if request.method == "POST":  # добавить кастомное событие
         if request.form.get("submit_event"):
             name_event = request.form.get("name_event")
             description_event = request.form.get("description_event")
+            date_begin_event = request.form.get("date_begin_event")
             time_begin_event = request.form.get("time_begin_event")
-            if time_begin_event is not None and time_begin_event != '':
-                time_begin_event = datetime.strptime(time_begin_event, '%Y-%m-%dT%H:%M')
+            if time_begin_event is not None and time_begin_event != '' and \
+                    date_begin_event is not None and date_begin_event != '':
+                begin_event = date_begin_event + 'T' + time_begin_event
+                begin_event = datetime.strptime(begin_event, '%Y-%m-%dT%H:%M')
+            date_end_event = request.form.get("date_end_event")
             time_end_event = request.form.get("time_end_event")
-            if time_end_event is not None and time_end_event != '':
-                time_end_event = datetime.strptime(time_end_event, '%Y-%m-%dT%H:%M')
+            if time_end_event is not None and time_end_event != '' and \
+                    date_end_event is not None and date_end_event != '':
+                end_event = date_end_event + 'T' + time_end_event
+                end_event = datetime.strptime(end_event, '%Y-%m-%dT%H:%M')
             else:
-                time_end_event = None
+                end_event = begin_event
             type_event = request.form.get("type_event")
             Event.save_event(session["user_id"], name_event,
-                             time_begin_event, time_end_event,
+                             begin_event, end_event,
                              type_event, description_event)
             return redirect(url_for("events"))
-
-        else:
-            return render_template("add_custom_events.html",
-                                   logged_in=session.get("logged_in", False),
-                                   username=session.get("username"),
-                                   pfp=session.get("pfp"))
 
 
 @app.route("/login", methods=['POST'])
