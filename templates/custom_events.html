@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}List of events{% endblock %}
+{% block title %}Список событий{% endblock %}
 
 {% block content %}
 	<div style="text-align: center;">
@@ -26,7 +26,7 @@
             <div></div>
             <div></div>
 
-            <form action="/events" method="GET">
+            <form action="/events_render" method="GET">
                 <button class="btn btn-primary" style="float: right">
                         Сбросить фильтр
                 </button>

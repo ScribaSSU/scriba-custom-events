@@ -5,16 +5,16 @@
 {% block content %}
     <div style="text-align: center;">
 
-	   <form action = "/classes" method="GET" onsubmit="return isAuth('{{ logged_in }}')">
+	   <form action = "/classes_render" method="GET" onsubmit="return isAuth('{{ logged_in }}')">
            <input id="show_lesson" type="submit" class="show_list" value="Список пар">
        </form>
-	   <form action = "/events" method="GET" onsubmit="return isAuth('{{ logged_in }}')">
+	   <form action = "/events_render" method="GET" onsubmit="return isAuth('{{ logged_in }}')">
            <input id="show_event" type="submit" class="show_list" value="Список кастомных событий">
        </form>
-	   <form action = "/classes" method="POST" onsubmit="return isAuth('{{ logged_in }}')">
+	   <form action = "/classes_add" method="GET" onsubmit="return isAuth('{{ logged_in }}')">
            <input id="add_lesson" type="submit" class="add" value="Добавить пару">
        </form>
-	   <form action = "/events" method="POST" onsubmit="return isAuth('{{ logged_in }}')">
+	   <form action = "/add_events_render" method="GET" onsubmit="return isAuth('{{ logged_in }}')">
            <input id="add_event" type="submit" class="add" value="Добавить кастомное событие">
        </form>
 	</div>
