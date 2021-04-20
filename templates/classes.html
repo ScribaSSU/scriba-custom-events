@@ -3,7 +3,35 @@
 {% block title %}Расписание{% endblock %}
 
 {% block content %}
+
 	<div style="text-align: center;">
+        <div class="wrapper" style="display: grid;grid-template-columns: auto auto 400px; margin-bottom: 20px;margin-right:10%">
+            <div></div>
+            <div></div>
+            {% if show_hidden %}
+            <form action="/show_hidden_switch" method="POST">
+                <button class="btn btn-primary" style="float: right" >
+                    Отображение скрытых пар: включено
+                </button>
+            </form>
+            {% else %}
+            <form action="/show_hidden_switch" method="POST">
+                <button class="btn btn-primary" style="float: right; background-color: #f54278" >
+                    Отображение скрытых пар: выключено
+                </button>
+            </form>
+            {% endif %}
+        </div>
+
+        <div class="wrapper" style="display: grid;grid-template-columns: auto auto 400px; margin-bottom: 20px;margin-right:10%">
+            <div></div>
+            <div></div>
+            <form action="/clear_hidden_lessons" method="POST">
+                <button class="btn btn-primary" style="float: right; background-color: #00a300" >
+                    Очистить список скрытых пар
+                </button>
+            </form>
+        </div>
 
         <h3>Расписание:</h3>
         <form action="/submit_preferences" method="POST">
@@ -36,31 +64,63 @@
                 </select>
             </div>
 
+            <input type="hidden" name="show_hidden_value" value="{{show_hidden}}" />
+
             <input id="submit_preferences" name="submit_preferences" type="submit" class="submit_event" value="Выбрать">
         </form>
         <br>
        <h2><b>Текущий выбор:</b></h2>
+        {% if user_department and user_group %}
         <h2><i>{{user_department}}, гр.{{user_group}}</i></h2>
+        {% else %}
+        <h2><i>Выберите факультет, курс и группу.</i></h2>
+        {% endif %}
         <br>
         {% for i in range(0, 6) %}
+        {% if data[i] %}
         <h2><b>{{week_days[i]}}:</b></h2>
+        {% endif %}
                 {% for row in data[i] %}
-                    <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px; background: rgba(255, 255, 255, 0.8);
+                    {% if row.hidden %}
+                    <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px;
+                    background: rgba(255, 255, 255, 0.8); box-shadow: 0 4px 2px -2px red;
+                     margin: auto;">
 
-                     margin: auto; ">
+                        <form method="POST" action="/unhide_lesson">
+                            <button type="submit" name="show_lesson" class="btn btn-outline-success" aria-label="Show lesson" style="float: right" value="{{row.hidden_id}}">Отображать пару</button>
+                        </form>
 
+                        <p style="color:#808080"><i>пара скрыта</i></p>
+
+                    {% else %}
+                    <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px;
+                    background: rgba(255, 255, 255, 0.8);
+                     margin: auto;">
+
+                        <form method="POST" action="/hide_lesson">
+                            <input type="hidden" name="hidden_class_userDepartment" value="{{user_department_url}}" />
+                            <input type="hidden" name="hidden_class_userGroup" value="{{user_group}}" />
+                            <input type="hidden" name="hidden_class_userSubGroup" value="{{row.subGroup}}" />
+                            <input type="hidden" name="hidden_class_weekDay" value="{{i+1}}" />
+                            <input type="hidden" name="hidden_class_weekType" value="{{row.weekType}}" />
+                            <input type="hidden" name="hidden_class_lessonNumber" value="{{row.lessonTime.lessonNumber}}" />
+                            <button type="submit" name="hide_lesson" class="btn btn-outline-danger" aria-label="Hide lesson" style="float: right">Скрыть пару</button>
+                        </form>
+                    {% endif %}
                          <a>
                              <b>Номер пары: {{row.lessonTime.lessonNumber}}</b>
                              <br><b>Время: {{"%02d" % row.lessonTime.hourStart}}:{{"%02d" % row.lessonTime.minuteStart}}-{{"%02d" % row.lessonTime.hourEnd}}:{{"%02d" % row.lessonTime.minuteEnd}}</b>
                              <br><b>Название: {{row.name}}</b>
+                             {% if row.subGroup %}
+                             <br><b>{{row.subGroup}}</b>
+                             {% endif %}
                              <br>{{row.place}}
                              {% if not row.weekType == "FULL" %}
-                             <br>{{week_types[row.weekType]}}
+                                <br>{{week_types[row.weekType]}}
                              {% endif %}
                              <br>{{lesson_types[row.lessonType]}}
                              <br>Преподаватель: {{row.teacher.surname}} {{row.teacher.name}} {{row.teacher.patronymic}}
                         </a>
-
                     </div>
                     <br>
                 {% endfor %}
@@ -78,12 +138,12 @@ var department_flag = false;
 department.onchange = handleChange_department;
 course.onchange = handleChange_course;
 
-function handleChange_department(e) {
+function handleChange_department() {
     department_flag = true;
     handleChange_both();
 }
 
-function handleChange_course(e) {
+function handleChange_course() {
     course_flag = true;
     handleChange_both();
 }

@@ -47,5 +47,23 @@
         function eventAdded() {
             alert("Событие добавлено!");
         }
+
+        var empty_end_date = document.getElementById('date_end_event');
+        var empty_end_time = document.getElementById('time_end_event');
+
+        empty_end_date.onchange = handleChange;
+        empty_end_time.onchange = handleChange;
+
+        function handleChange() {
+               if (!empty_end_date.value && !empty_end_time.value) {
+                   empty_end_date.required = false;
+                   empty_end_time.required = false;
+               } else {
+                   empty_end_date.required = true;
+                   empty_end_time.required = true;
+               }
+        }
+
+
     </script>
 {% endblock %}
