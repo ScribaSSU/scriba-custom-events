@@ -1,1 +1,12 @@
-2021-04-22 22:24:43 INFO [werkzeug] -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2021-04-22 22:30:05 INFO [werkzeug] -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2021-04-22 22:30:09 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:09] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-22 22:30:09 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:09] "[37mGET /static/images/shortcut_icon.png HTTP/1.1[0m" 200 -
+2021-04-22 22:30:11 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:11] "[32mGET /add_events_render HTTP/1.1[0m" 302 -
+2021-04-22 22:30:11 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:11] "[37mGET /add_events HTTP/1.1[0m" 200 -
+2021-04-22 22:30:24 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:24] "[32mPOST /submit_events HTTP/1.1[0m" 302 -
+2021-04-22 22:30:24 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:24] "[37mGET /events HTTP/1.1[0m" 200 -
+2021-04-22 22:30:29 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:29] "[37mGET / HTTP/1.1[0m" 200 -
+2021-04-22 22:30:35 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:35] "[32mGET /add_classes_render HTTP/1.1[0m" 302 -
+2021-04-22 22:30:35 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:35] "[37mGET /add_classes HTTP/1.1[0m" 200 -
+2021-04-22 22:30:54 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:54] "[32mPOST /submit_classes HTTP/1.1[0m" 302 -
+2021-04-22 22:30:54 INFO [werkzeug] - 127.0.0.1 - - [22/Apr/2021 22:30:54] "[37mGET /classes HTTP/1.1[0m" 200 -
