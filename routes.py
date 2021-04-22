@@ -5,9 +5,9 @@ from flask import render_template, request, redirect, url_for, session
 from app import app
 from settings import vk_conf
 from models.event import Event
-from models.added_lesson import AddedLesson
 from models.user_preferences import UserPreferences
 from models.hidden_lesson import HiddenLesson
+from models.added_lesson import AddedLesson
 import requests
 import tracto_api
 
