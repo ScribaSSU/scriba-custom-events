@@ -81,6 +81,7 @@
         <h2><b>{{week_days[i]}}:</b></h2>
         {% endif %}
                 {% for row in data[i] %}
+
                     {% if row.hidden %}
                     <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px;
                     background: rgba(255, 255, 255, 0.8); box-shadow: 0 4px 2px -2px red;
@@ -92,7 +93,19 @@
 
                         <p style="color:#808080"><i>пара скрыта</i></p>
 
+                    {% elif row.added%}
+                        <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px;
+                    background: rgba(255, 255, 255, 0.8); box-shadow: 0 4px 2px -2px yellow;
+                     margin: auto;">
+
+                        <form method="POST" action="/delete_added_lesson">
+
+                            <button type="submit" name="delete_lesson" class="btn btn-outline-danger"
+                                    aria-label="Delete lesson" style="float: right" value="{{row.lesson_id}}">Удалить пару</button>
+                        </form>
+                            <p style="font-family: 'arial' "><i>Пользовательская пара</i></p>
                     {% else %}
+
                     <div class="card" style="width: 80%; font-size: 20pt; border-radius: 20px; padding: 20px;
                     background: rgba(255, 255, 255, 0.8);
                      margin: auto;">
@@ -152,7 +165,7 @@ function getGroups() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-        html = "";
+        html = "<option disabled selected value=\"\"> Выберите группу </option>";
         var response = JSON.parse(this.responseText);
         for (var key in response["groupNumbers"]) {
             html += "<option value=\"" + response["groupNumbers"][key] + "\">" + response["groupNumbers"][key] + "</option>"

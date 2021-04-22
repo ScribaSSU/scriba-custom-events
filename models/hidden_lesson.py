@@ -3,7 +3,7 @@ from models.db import db
 
 
 class HiddenLesson(db.Model):
-    __tablename__ = "addedLesson"
+    __tablename__ = "hiddenLesson"
     hidden_lesson_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
     department = db.Column(db.String(200), nullable=False)

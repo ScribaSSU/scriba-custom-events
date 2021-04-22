@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить пару{% endblock %}
+
+{% block content %}
+    <div style="margin: 50px; background: rgba(255, 255, 255, 0.6); text-align: center;">
+        <h2>Добавление кастомной пары</h2>
+        <br>
+        <form action="/submit_classes" method="POST">
+            <div class="form-group">
+                <label for="name_class">Название</label>
+                <input type="text" class="form-control" id="name_class" name="name_class" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name_teacher">Имя преподавателя</label>
+                <input type="text" class="form-control" id="name_teacher" name="name_teacher" required>
+            </div>
+
+            <div class="form-group">
+                <label for="place">Место проведения</label>
+                <input type="text" class="form-control" id="place" name="place" required>
+            </div>
+
+            <div class="form-group">
+                <label for="department">Факультет</label>
+                <select class="form-control" id="department" name="department" required>
+                    <option disabled selected value=""> Выберите факультет </option>
+                    {% for url in departments.keys()%}
+                    <option value="{{url}}">{{departments[url][0]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="course">Курс</label>
+                <select class="form-control" id="course" name="course" required>
+                    <option disabled selected value=""> Выберите курс </option>
+                    {% for i in range (1, 6)%}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="group">Группа</label>
+                <select class="form-control" id="group" name="group" disabled required>
+                    <option disabled selected value=""> Выберите группу </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subgroup">Подгруппа</label>
+                <input type="text" class="form-control" id="subgroup" name="subgroup">
+            </div>
+
+            <div class="form-group">
+                <label for="week_day">День недели</label>
+                <select class="form-control" id="week_day" name="week_day" required>
+                    <option disabled selected value=""> Выберите день недели </option>
+                    <option value="1">Понедельник</option>
+                    <option value="2">Вторник</option>
+                    <option value="3">Среда</option>
+                    <option value="4">Четверг</option>
+                    <option value="5">Пятница</option>
+                    <option value="6">Суббота</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="week_type">Тип недели</label>
+                <select class="form-control" id="week_type" name="week_type" required>
+                    <option disabled selected value=""> Выберите тип недели </option>
+                    <option value="FULL">Еженедельно</option>
+                    <option value="NOM">Числитель</option>
+                    <option value="DENOM">Знаменатель</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="lesson_number">Номер пары</label>
+                <select class="form-control" id="lesson_number" name="lesson_number" required>
+                    <option disabled selected value=""> Выберите номер пары</option>
+                    {% for i in range (1, 9)%}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="time_begin_lesson">Время начала</label>
+                <input class="form-control" type="time" id="time_begin_lesson" name="time_begin_lesson" required>
+            </div>
+
+            <div class="form-group">
+                <label for="time_end_lesson">Время окончания</label>
+                <input class="form-control" type="time" id="time_end_lesson" name="time_end_lesson" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lesson_type">Тип пары</label>
+                <select class="form-control" id="lesson_type" name="lesson_type" required>
+                    <option disabled selected value=""> Выберите тип пары</option>
+                    <option value="LECTURE">Лекция</option>
+                    <option value="PRACTICE">Практика</option>
+                </select>
+            </div>
+
+            <input id="submit_class" name="submit_class" type="submit" class="submit_class" value="Добавить", onclick="classAdded()">
+        </form>
+    </div>
+
+<script>
+function classAdded() {
+    alert("Пара добавлена!");
+}
+
+var department =  document.getElementById('department');
+var course = document.getElementById('course');
+var group = document.getElementById('group');
+
+var course_flag = false;
+var department_flag = false;
+
+department.onchange = handleChange_department;
+course.onchange = handleChange_course;
+
+function handleChange_department() {
+    department_flag = true;
+    handleChange_both();
+}
+
+function handleChange_course() {
+    course_flag = true;
+    handleChange_both();
+}
+
+function getGroups() {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            html = "<option disabled selected value=\"\"> Выберите группу </option>";
+            var response = JSON.parse(this.responseText);
+            for (var key in response["groupNumbers"]) {
+                html += "<option value=\"" + response["groupNumbers"][key] + "\">" + response["groupNumbers"][key] + "</option>"
+            }
+        group.innerHTML = html;
+        }
+    };
+
+
+    var link = "https://scribabot.ml/api/v1.0/group/number/" + department.value + "/do/" + course.value;
+    xhttp.open("GET", link, true);
+    xhttp.send();
+}
+
+function handleChange_both() {
+    if (department_flag && course_flag) {
+        group.disabled = false;
+        getGroups();
+    }
+}
+
+
+var lesson_number =  document.getElementById('lesson_number');
+var begin = document.getElementById('time_begin_lesson');
+var end = document.getElementById('time_end_lesson');
+
+lesson_number.onchange = handle_change_lesson_number;
+
+var dict_begins = {
+    1: "08:20",
+    2: "10:00",
+    3: "12:05",
+    4: "13:50",
+    5: "15:35",
+    6: "17:20",
+    7: "18:45",
+    8: "20:10"
+};
+
+var dict_ends = {
+    1: "09:50",
+    2: "11:35",
+    3: "13:40",
+    4: "15:25",
+    5: "17:10",
+    6: "18:40",
+    7: "20:05",
+    8: "21:30"
+};
+
+function handle_change_lesson_number() {
+    var number = lesson_number.value
+    begin.value = dict_begins[number]
+    end.value = dict_ends[number]
+}
+
+    </script>
+{% endblock %}

@@ -5,9 +5,11 @@ from flask import render_template, request, redirect, url_for, session
 from app import app
 from settings import vk_conf
 from models.event import Event
+from models.added_lesson import AddedLesson
 from models.user_preferences import UserPreferences
 from models.hidden_lesson import HiddenLesson
 import requests
+import tracto_api
 
 CLIENT_ID = vk_conf["client_id"]
 CLIENT_SECRET = vk_conf["client_secret"]
@@ -33,18 +35,44 @@ def classes_render():
     return redirect(url_for("classes"))
 
 
+def create_lesson_dict(lesson):
+    lesson_dict = {
+        "name": lesson.lesson_name,
+        "place": lesson.place,
+        "department": lesson.department,
+        "studentGroup": lesson.group,
+        "teacher": {
+            "surname": lesson.teacher_name,
+            "name": "",
+            "patronymic": ""
+        },
+        "day": {
+            "dayNumber": lesson.week_day
+        },
+        "lessonTime": {
+            "lessonNumber": lesson.lesson_number,
+            "hourStart": lesson.time_begin.hour,
+            "minuteStart": lesson.time_begin.minute,
+            "hourEnd": lesson.time_end.hour,
+            "minuteEnd": lesson.time_end.minute,
+
+        },
+        "subGroup": lesson.subgroup,
+        "weekType": lesson.week_type,
+        "lessonType": lesson.lesson_type,
+        "lesson_id": lesson.lesson_id
+    }
+
+    return lesson_dict
+
+
 @app.route("/classes", methods=["GET"])
 def classes():
     if not session.get("logged_in", False):
         return redirect(url_for("index"))
 
-    lessons_list = []
     lessons_list_filtered = []
-    departments = {}
-
-    link = "https://scribabot.ml/api/v1.0/departments"
-    for department in requests.get(link).json()["departmentsList"]:
-        departments[department["url"]] = (department["fullName"], department["shortName"])
+    departments = tracto_api.get_departments_list()
 
     preferences = UserPreferences.get_user_preferences(session.get("user_id", None))
     if preferences:
@@ -59,20 +87,29 @@ def classes():
         show_hidden = False
 
     if department and group_number:
-        link = "https://scribabot.ml/api/v1.0/schedule/full/" + \
-               f"{department}/{group_number}"
-        for i in range(0, 6):
-            lessons_list.append([])
-        for lesson in requests.get(link).json()["lessons"]:
-            lessons_list[lesson["day"]["dayNumber"]-1].append(lesson)
+        lessons_list = [[] for _ in range(6)]
+
+        added_lessons = AddedLesson.find_added_lessons(session.get("user_id", None))
+        dict_added_lessons = list(map(create_lesson_dict, added_lessons))
+
+
+        for lesson in tracto_api.get_schedule(department, group_number):
+            lesson["added"] = False
+            lessons_list[lesson["day"]["dayNumber"] - 1].append(lesson)
+
+        for lesson in dict_added_lessons:
+            lesson["added"] = True
+            lessons_list[lesson["day"]["dayNumber"] - 1].append(lesson)
+
         for i in range(0, 6):
             lessons_list[i] = sorted(lessons_list[i],
                                      key=lambda x: x["lessonTime"]["lessonNumber"])
+
         if show_hidden:
             for i in range(1, 7):
                 lessons_day_list = []
                 hidden_lessons_list = HiddenLesson.find_hidden_lessons_by_day(session.get("user_id", None), i)
-                for lesson in lessons_list[i-1]:
+                for lesson in lessons_list[i - 1]:
                     lesson["hidden"] = False
                     for hidden_lesson in hidden_lessons_list:
                         if (department == hidden_lesson.department and
@@ -88,7 +125,7 @@ def classes():
             for i in range(1, 7):
                 lessons_day_list = []
                 hidden_lessons_list = HiddenLesson.find_hidden_lessons_by_day(session.get("user_id", None), i)
-                for lesson in lessons_list[i-1]:
+                for lesson in lessons_list[i - 1]:
                     skip = False
                     for hidden_lesson in hidden_lessons_list:
                         if (department == hidden_lesson.department and
@@ -242,6 +279,26 @@ def add_events():
                            pfp=session.get("pfp"))
 
 
+@app.route("/add_classes_render", methods=["GET"])
+def add_classes_render():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+    return redirect(url_for("add_classes"))
+
+
+@app.route("/add_classes", methods=["GET"])
+def add_classes():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+
+    departments = tracto_api.get_departments_list()
+    return render_template("add_custom_classes.html",
+                           logged_in=session.get("logged_in", False),
+                           username=session.get("username"),
+                           pfp=session.get("pfp"),
+                           departments=departments)
+
+
 @app.route("/submit_events", methods=["POST"])
 def submit_events():
     if not session.get("logged_in", False):
@@ -268,6 +325,58 @@ def submit_events():
                          begin_event, end_event,
                          type_event, description_event)
         return redirect(url_for("events"))
+
+
+@app.route("/submit_classes", methods=["POST"])
+def submit_classes():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+
+    if request.form.get("submit_class"):
+        name_class = request.form.get("name_class")
+        name_teacher = request.form.get("name_teacher")
+        department = request.form.get("department")
+        group = request.form.get("group")
+        week_day = request.form.get("week_day")
+        week_type = request.form.get("week_type")
+        lesson_number = request.form.get("lesson_number")
+        time_begin_lesson = request.form.get("time_begin_lesson")
+        time_end_lesson = request.form.get("time_end_lesson")
+        lesson_type = request.form.get("lesson_type")
+        place = request.form.get("place")
+        subgroup = request.form.get("subgroup")
+
+        time_begin_lesson = datetime.strptime(time_begin_lesson, '%H:%M').time()
+        time_end_lesson = datetime.strptime(time_end_lesson, '%H:%M').time()
+        lesson_number = int(lesson_number)
+
+        AddedLesson.save_lesson(
+            user_id=session["user_id"],
+            lesson_name=name_class,
+            department=department,
+            group=group,
+            week_day=week_day,
+            week_type=week_type,
+            lesson_number=lesson_number,
+            lesson_type=lesson_type,
+            teacher_name=name_teacher,
+            time_begin=time_begin_lesson,
+            time_end=time_end_lesson,
+            place=place,
+            subgroup=subgroup
+        )
+
+        return redirect(url_for("classes"))
+
+
+@app.route("/delete_added_lesson", methods=['POST'])
+def delete_added_lesson():
+    if not session.get("logged_in", False):
+        return redirect(url_for("index"))
+
+    lesson_id = request.form.get("delete_lesson")
+    AddedLesson.delete_lesson(lesson_id)
+    return redirect(url_for("classes"))
 
 
 @app.route("/login", methods=['POST'])
